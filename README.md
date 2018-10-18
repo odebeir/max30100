@@ -1,9 +1,10 @@
-# A Python library for the Maxim MAX30100 pulse oximetry chip
+# A micropython library for the Maxim MAX30100 pulse oximetry chip
 
-This library provides a basic Python interface to the MAXIM MAX30100 heart rate and Sp02 sensor chip. Other libraries
-are available (e.g. Intel's UPM) but these are not easily compiled on a Raspberry Pi.
+This is a [MicroPython](http://micropython.org/) library for MAXIM MAX30100 heart rate and Sp02 sensor chip.
+This library has been tested on a pyboard lite v1.0.
 
-This library is a Python re-implementation of original C library by Connor Huffine/Kontakt, available [here](https://github.com/kontakt/MAX30100),
+This library is adapted from the Python library by Martin Fitzpatrick/mfitzp, available [here](https://github.com/mfitzp/max30100)
+which is based on the original C library by Connor Huffine/Kontakt, available [here](https://github.com/kontakt/MAX30100),
 with a slightly different API + additional features (buffering values, etc.).
 
 Currently this library supports both IR led (pulse) and red led (SpO2) modes, with support (via gpiozero) for
@@ -19,7 +20,7 @@ You can create an interface to your device/chip by creating an instance of the M
 
 You can pass a number of optional parameters to configure the initial setup, including:
 
-- `i2c` a custom i2c object, if you already have a connection option to the bus
+- `i2c` a custom i2c object, if you already have a connection option to the bus 
 - `mode` to enable SpO2 readings by default
 - `sample_rate` number of data samples to take per second
 - `pulse_width` the duration of each sample
@@ -60,7 +61,7 @@ oxygen saturation).
 
 The previous measurements are available in `.buffer_ir` and `.buffer_red`.
 
-## Automating measurements
+## Automating measurements (! not implemented/tested)
 
 The MX30100 chip provides an interrupt mechanism which can be used to trigger readings once values are available. Using
 `gpiozero` we can connect this interrupt trigger to the `MAX30100.read_sensor` method, resulting in real-time measurement
