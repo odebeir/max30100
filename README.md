@@ -65,6 +65,9 @@ The previous measurements are available in `.buffer_ir` and `.buffer_red`.
 
 The MX30100 chip provides an interrupt mechanism which can be used to trigger readings once values are available.
 
+## Generator based filters
+
+tbd... 
 
 
 

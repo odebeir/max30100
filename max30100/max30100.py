@@ -131,7 +131,7 @@ class MAX30100(object):
         return self.buffer_ir[-1] if self.buffer_ir else None
 
     def read_register(self,reg_address):
-        #returns int
+        # returns int
         reg = self.i2c.mem_read(1, I2C_ADDRESS, reg_address)
         return int.from_bytes(reg,'little')
 
