@@ -25,16 +25,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 from max30100 import MAX30100
-from max30100.filters import median_filter
+from max30100.filters import median_filter,bpm_filter,maxmin_filter
+import pyb
 
+def test():
 
-def read_raw_data():
-    mx30 = MAX30100()
-    for d in mx30.generator():
-        print(d)
+    h = MAX30100()
 
-
-def median_filtered_data():
-    mx30 = MAX30100()
-    for d in median_filter(mx30.generator(),30):
-        print(d)
+    g = h.generator(40)
+    with open("/sd/pulse_max30100.csv", "w") as f:
+        f.write("bpm,adc,med,trig,max,min\n")
+        for s, v, h in bpm_filter(maxmin_filter(median_filter(g, 5), size=20, th_low=.4, th_high=.70)):
+            print(h)
+            f.write("%f,%d,%d,%d,%d,%d\n" % (h['bpm'],h['adc'],h['med'],h['trig'],h['max'],h['min']))
+            if h['trig']:
+                pyb.LED(1).on()
+            else:
+                pyb.LED(1).off()
+        f.close()
+        pyb.sync()

@@ -120,15 +120,17 @@ def bpm_filter(g, size=10):
     for sample, new_val, hist in g:
         if not current and new_val:  # rising edge
             current = True
-            delta = utime.ticks_diff(values[(pos + 1) % size], values[pos])
-            values[pos] = utime.ticks_us()
-            pos = (pos + 1) % size
-        elif not new_val:  # faling edge
-            current = False
+            t = utime.ticks_us()
+            values[pos] = t
+            next_pos = (pos + 1) % size
+            delta = utime.ticks_diff(t,values[next_pos])
+            pos = next_pos
+        else:
+            if not new_val:  # faling edge
+                current = False
 
-        hist['bpm'] = 10e6 * size / (delta + 1)
+        hist['bpm'] = 60e6 * size / (delta + 1)
         yield (sample, delta, hist)
-
 
 def derivative_filter(g):
     prev_val = 0.0
