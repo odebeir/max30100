@@ -11,8 +11,6 @@
 
   October 2018
 """
-
-import pyb
 from pyb import I2C
 from ucollections import OrderedDict
 import utime
@@ -28,7 +26,7 @@ SPO2_CONFIG  = 0x07  # Oximetry settings
 LED_CONFIG   = 0x09  # Pulse width and power of LEDs
 TEMP_INTG    = 0x16  # Temperature value, whole number
 TEMP_FRAC    = 0x17  # Temperature value, fraction
-REV_ID       = 0xFE  # Part revision
+REV_ID       = 0xFE  # Part revisionpep
 PART_ID      = 0xFF  # Part ID, normally 0x11
 
 I2C_ADDRESS  = 0x57  # I2C address of the MAX30100 device

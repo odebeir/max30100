@@ -183,9 +183,6 @@ def resample_filter(g, ticks_us):
             yield sample, delta, hist
 
 
-def example():
-    g = adc_gen(10)
-    for s, v, h in resample_filter(freq_filter(avg_filter(median_filter(g, 10), 10)), 1000000):
-        print(h)
+
 
 
