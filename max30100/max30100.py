@@ -109,7 +109,8 @@ class MAX30100(object):
         self.i2c = i2c if i2c else I2C(1)
         self.i2c.init(mode=I2C.MASTER)
 
-        self.set_mode(MODE_HR)  # Trigger an initial temperature read.
+        #self.set_mode(MODE_HR)  # Trigger an initial temperature read.
+        self.enable_spo2()
         self.set_led_current(led_current_red, led_current_ir)
         self.set_spo_config(sample_rate, pulse_width)
 
@@ -216,7 +217,12 @@ class MAX30100(object):
             "PART_ID": self.read_register(PART_ID),
         }
 
-    def generator(self,delay=None):
+    def generator(self,delay=40):
+        """ generator that produces infinite list of IR values
+
+        :param delay: minimum delay (ms) between two yields
+        :return: a generator (see examples)
+        """
         sample = 0
         ms_time = utime.ticks_ms()
         while True:
@@ -227,5 +233,8 @@ class MAX30100(object):
                 hist = OrderedDict()
                 hist['#'] = sample
                 hist['adc'] = value
+                self.refresh_temperature()
+                hist['temp'] = self.get_temperature()
+                hist['red'] = self.red
                 yield (sample,value,hist)
                 sample += 1

@@ -34,10 +34,11 @@ def test():
 
     g = h.generator(40)
     with open("/sd/pulse_max30100.csv", "w") as f:
-        f.write("bpm,adc,med,trig,max,min\n")
+        f.write("temp,bpm,red,adc,med,trig,max,min\n")
         for s, v, h in bpm_filter(maxmin_filter(median_filter(g, 5), size=20, th_low=.4, th_high=.70)):
             print(h)
-            f.write("%f,%d,%d,%d,%d,%d\n" % (h['bpm'],h['adc'],h['med'],h['trig'],h['max'],h['min']))
+            f.write("%f,%f,%d,%d,%d,%d,%d,%d\n" % (
+            h['temp'], h['bpm'], h['red'], h['adc'], h['med'], h['trig'], h['max'], h['min']))
             if h['trig']:
                 pyb.LED(1).on()
             else:
