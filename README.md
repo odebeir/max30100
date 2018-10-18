@@ -1,7 +1,7 @@
 # A micropython library for the Maxim MAX30100 pulse oximetry chip
 
 This is a [MicroPython](http://micropython.org/) library for MAXIM MAX30100 heart rate and Sp02 sensor chip.
-This library has been tested on a pyboard lite v1.0.
+This library has been tested on a [pyboard lite v1.0](http://micropython.org/resources/pyblitev10ac-pinout.jpg).
 
 This library is adapted from the Python library by Martin Fitzpatrick/mfitzp, available [here](https://github.com/mfitzp/max30100)
 which is based on the original C library by Connor Huffine/Kontakt, available [here](https://github.com/kontakt/MAX30100),
@@ -61,31 +61,9 @@ oxygen saturation).
 
 The previous measurements are available in `.buffer_ir` and `.buffer_red`.
 
-## Automating measurements (! not implemented/tested)
+## Automating measurements 
 
-The MX30100 chip provides an interrupt mechanism which can be used to trigger readings once values are available. Using
-`gpiozero` we can connect this interrupt trigger to the `MAX30100.read_sensor` method, resulting in real-time measurement
-output in our FIFO buffer. Connect the INT pin of the MAX301000 to a suitable pin on your controller. For example —
-
-
-    mx30.set_interrupt(max30100.INTERRUPT_FIFO)  # Set up a trigger to fire when the FIFO buffer (on the MAX30100) fills up.
-                                                 # You could also use INTERRUPT_HR to get a trigger on every measurement.
-
-    from gpiozero import Button  # A button is a good approximation for what we need, a digital active-low trigger
-    interrupt = Button(16)  # Pick a pin
-    interrupt.when_activated = mx30.read_sensor  # Connect the interrupt
-
-You can now see the values in the buffers, e.g.
-
-    mx30.buffer_red
-
-Or if that's too much, tail the most recent values, e.g.
-
-    while True:
-         print(mx30.buffer_red[-10:])
-
-
-
+The MX30100 chip provides an interrupt mechanism which can be used to trigger readings once values are available.
 
 
 
