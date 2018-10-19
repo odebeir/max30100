@@ -28,10 +28,9 @@ from max30100 import MAX30100
 from max30100.filters import median_filter,bpm_filter,maxmin_filter
 import pyb
 
-def test():
+def rec():
 
     h = MAX30100()
-
     g = h.generator(25)
     with open("/sd/pulse_max30100.csv", "w") as f:
         f.write("temp,bpm,red,adc,med,trig,max,min\n")
@@ -45,3 +44,14 @@ def test():
                 pyb.LED(1).off()
         f.close()
         pyb.sync()
+
+def test():
+
+    h = MAX30100()
+    g = h.generator(25)
+    for s, v, h in bpm_filter(maxmin_filter(median_filter(g, 5), size=40, th_low=.4, th_high=.70)):
+        print(h)
+        if h['trig']:
+            pyb.LED(1).on()
+        else:
+            pyb.LED(1).off()
