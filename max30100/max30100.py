@@ -109,6 +109,8 @@ class MAX30100(object):
         self.i2c = i2c if i2c else I2C(1)
         self.i2c.init(mode=I2C.MASTER)
 
+        pyb.delay(200)
+
         #self.set_mode(MODE_HR)  # Trigger an initial temperature read.
         self.enable_spo2()
         self.set_led_current(led_current_red, led_current_ir)

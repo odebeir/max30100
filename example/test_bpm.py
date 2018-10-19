@@ -32,10 +32,10 @@ def test():
 
     h = MAX30100()
 
-    g = h.generator(40)
+    g = h.generator(25)
     with open("/sd/pulse_max30100.csv", "w") as f:
         f.write("temp,bpm,red,adc,med,trig,max,min\n")
-        for s, v, h in bpm_filter(maxmin_filter(median_filter(g, 5), size=20, th_low=.4, th_high=.70)):
+        for s, v, h in bpm_filter(maxmin_filter(median_filter(g, 5), size=40, th_low=.4, th_high=.70)):
             print(h)
             f.write("%f,%f,%d,%d,%d,%d,%d,%d\n" % (
             h['temp'], h['bpm'], h['red'], h['adc'], h['med'], h['trig'], h['max'], h['min']))
