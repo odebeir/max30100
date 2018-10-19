@@ -11,7 +11,7 @@
 
   October 2018
 """
-from pyb import I2C
+from pyb import I2C,delay
 from ucollections import OrderedDict
 import utime
 
@@ -103,13 +103,13 @@ class MAX30100(object):
                  ):
 
         # Default to the standard I2C bus on Pi.
-        # I2C(1) is on the X position: (SCL, SDA) = (X9, X10) = (PB6, PB7)
-        # I2C(2) is on the Y position: (SCL, SDA) = (Y9, Y10) = (PB10, PB11)
+        # I2C(1) : (SCL, SDA) = (X9, X10) = (PB6, PB7)
+        # I2C(2) : (SCL, SDA) = (Y9, Y10) = (PB10, PB11)
 
         self.i2c = i2c if i2c else I2C(1)
         self.i2c.init(mode=I2C.MASTER)
 
-        pyb.delay(200)
+        delay(200)
 
         #self.set_mode(MODE_HR)  # Trigger an initial temperature read.
         self.enable_spo2()

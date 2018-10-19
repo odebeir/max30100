@@ -165,7 +165,7 @@ def hold_filter(g, size):
         count = (count + 1) % size
 
 
-def freq_filter(g):
+def delta_filter(g):
     freq = 0
     prev_us = utime.ticks_us()
     for sample, new_val, hist in g:

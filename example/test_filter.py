@@ -24,9 +24,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-from max30100 import resample_filter,freq_filter,avg_filter,median_filter,adc_gen
+from max30100 import resample_filter,delta_filter,avg_filter,median_filter,adc_gen
 
 def example():
     g = adc_gen(10)
-    for s, v, h in resample_filter(freq_filter(avg_filter(median_filter(g, 10), 10)), 1000000):
+    for s, v, h in resample_filter(delta_filter(avg_filter(median_filter(g, 10), 10)), 1000000):
         print(h)
