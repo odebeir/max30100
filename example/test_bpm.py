@@ -24,24 +24,50 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-from max30100 import MAX30100
+from max30100 import MAX30100, PULSE_WIDTH, SAMPLE_RATE
 from max30100.filters import median_filter,bpm_filter,maxmin_filter
+from max30100.filters import freq_filter,resample_filter,avg_filter,median_filter,bpm_filter
+from max30100.filters import hysteresis_filter,mean_filter,norm_filter,butterworth_filter
+from max30100.filters import adc_gen,derivative_filter,thresh_filter,diff_filter
+
+
 import pyb
 
 def rec():
+    h = MAX30100(sample_rate=SAMPLE_RATE[100], pulse_width=PULSE_WIDTH[1600])
 
-    h = MAX30100()
-    g = h.generator(25)
     with open("/sd/pulse_max30100.csv", "w") as f:
-        f.write("temp,bpm,red,adc,med,trig,max,min\n")
-        for s, v, h in bpm_filter(maxmin_filter(median_filter(g, 5), size=40, th_low=.4, th_high=.70)):
+        first = True
+
+        g = h.generator(delay=8)  # 10ms <> 100sps
+        # med = median_filter(g,15)
+        bw = butterworth_filter(g)
+
+        norm = norm_filter(bw, size=100)
+        diff = diff_filter(norm, size=20)
+        th = thresh_filter(diff, threshold=-.33, greater_than=False)
+        # th = hysteresis_filter(bw,size=100,th_high=.7,th_low=.3)
+
+        bpm = bpm_filter(th, size=3)
+
+        for s, v, h in bpm:
+            if first:
+                col_names = ",".join(h.keys())
+                f.write("%s\n" % col_names)
+                first = False
+
             print(h)
-            f.write("%f,%f,%d,%d,%d,%d,%d,%d\n" % (
-            h['temp'], h['bpm'], h['red'], h['adc'], h['med'], h['trig'], h['max'], h['min']))
-            if h['trig']:
+            s = ','.join([str(v) for v in h.values()])
+            f.write("%s\n" % s)
+
+            if h['thresh']:
                 pyb.LED(1).on()
             else:
                 pyb.LED(1).off()
+            # lcd.clear()
+            # lcd.write(str(h))
+            # if keys.read() is not 'none':
+            #     break
         f.close()
         pyb.sync()
 

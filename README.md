@@ -69,6 +69,14 @@ The MX30100 chip provides an interrupt mechanism which can be used to trigger re
 
 tbd... 
 
+## References
+
+1. [Blog on implementing pulse oximeter using MAX30100](https://morf.lv/implementing-pulse-oximeter-using-max30100)
+
+1. [MAX30100 datasheet](https://datasheets.maximintegrated.com/en/ds/MAX30100.pdf)
+
+
+
 
 
 
